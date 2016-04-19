@@ -16,6 +16,19 @@ class ThreadedTicketClient implements Runnable {
 		this.threadname = threadname;
 	}
 
+	//returns 1 if a seat sold, -1 if sold out
+	public int threadRun(Theater concertHall){
+		int seatFilled = -1;
+		int[] bestSeat = {-1,-1};
+		while (seatFilled == -1){
+			bestSeat = concertHall.bestAvailiableSeat();
+			if(bestSeat[0]==-1) return -1;
+			seatFilled = concertHall.setSeat(bestSeat[0], bestSeat[1], true);
+		}
+		concertHall.printSeat(bestSeat[0], bestSeat[1]);
+		return 1;
+	}
+	
 	public void run() {
 		System.out.flush();
 		try {

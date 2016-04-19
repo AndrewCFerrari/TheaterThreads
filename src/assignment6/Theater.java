@@ -1,8 +1,9 @@
 package assignment6;
 
 public class Theater {
-	boolean configuration[][];
-
+	boolean configuration[][]; //variable showing available seats
+	boolean configurationLocked;
+	
 	public boolean[][] getConfiguration() {
 		return configuration;
 	}
@@ -10,8 +11,17 @@ public class Theater {
 	public void setConfiguration(boolean[][] configuration) {
 		this.configuration = configuration;
 	}
+	
+	public boolean getConfigurationLocked() {
+		return configurationLocked;
+	}
+
+	public void setConfigurationLocked(boolean configurationLocked) {
+		this.configurationLocked = configurationLocked;
+	}
 
 	public Theater() {
+		this.setConfigurationLocked(false);
 		boolean[][] emptyTheater = new boolean[26][28];
 		for (int i=0;i<26;i++){
 			for (int j=0;j<28;j++){
@@ -20,7 +30,7 @@ public class Theater {
 		}
 		this.setConfiguration(emptyTheater);
 	}
-	
+
 	public int[] bestAvailiableSeat(){
 		boolean config[][] = this.getConfiguration();
 		int[] seat = new int[2]; 
@@ -42,6 +52,26 @@ public class Theater {
 		seat[0]= -1;
 		seat[1]= -1;
 		return seat;
+	}
+	
+	//Sets the seat Row, Column, to the boolean taken. Respects lock
+	//Returns 1 if the value changed, -1 if the value didn't change
+	public int setSeat (int row,int column, boolean taken){
+		while(this.getConfigurationLocked()){}
+		this.setConfigurationLocked(true);
+		boolean[][] currentSetup = this.getConfiguration();
+		boolean oldVal = currentSetup[row][column];
+		currentSetup[row][column]= taken;
+		this.setConfiguration(currentSetup);
+		this.setConfigurationLocked(false);
+		if (oldVal == taken) return -1;
+		return 1;
+	}
+	
+	public void printSeat (int row, int column){
+		String colString =  Integer.toString(column);
+		String rowString =  Character.toString((char)(row+65));
+		System.out.println("Seat "+rowString+colString+" sold");
 	}
 	
 }
