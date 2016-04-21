@@ -1,8 +1,15 @@
 package assignment6;
 
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+
 public class Theater {
 	boolean configuration[][]; //variable showing available seats
 	boolean configurationLocked;
+	
+	private Lock changeLock;
+	 
+	
 	
 	public boolean[][] getConfiguration() {
 		return configuration;
@@ -21,6 +28,7 @@ public class Theater {
 	}
 
 	public Theater() {
+		changeLock = new ReentrantLock();
 		this.setConfigurationLocked(false);
 		boolean[][] emptyTheater = new boolean[26][28];
 		for (int i=0;i<26;i++){
@@ -57,7 +65,9 @@ public class Theater {
 	//Sets the seat Row, Column, to the boolean taken. Respects lock
 	//Returns 1 if the value changed, -1 if the value didn't change
 	public int setSeat (int row,int column, boolean taken){
-		while(this.getConfigurationLocked()){}
+		changeLock.lock();
+		 try
+		 {
 		this.setConfigurationLocked(true);
 		boolean[][] currentSetup = this.getConfiguration();
 		boolean oldVal = currentSetup[row][column];
@@ -66,6 +76,9 @@ public class Theater {
 		this.setConfigurationLocked(false);
 		if (oldVal == taken) return -1;
 		return 1;
+		 }
+		 finally
+		 { changeLock.unlock();}
 	}
 	
 	public void printSeat (int row, int column){

@@ -5,21 +5,25 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 public class TestTicketOffice {
-
+	
 	public static int score = 0;
 
-	// @Test
+	@Test
 	public void basicServerTest() {
 		try {
-			TicketServer.start(16789);
+			TicketServer.start(444);
 		} catch (Exception e) {
 			fail();
 		}
-		TicketClient client = new TicketClient();
-		client.requestTicket();
+		
+		
+		for(int i = 0; i < 1000; i++){
+				TicketClient client = new TicketClient(Integer.toString(i), "", 444);
+				client.requestTicket();						
+		}		
 	}
 
-	@Test
+	/*@Test
 	public void testServerCachedHardInstance() {
 		try {
 			TicketServer.start(16790);
@@ -33,7 +37,7 @@ public class TestTicketOffice {
 		
 	}
 
-	@Test
+	//@Test
 	public void twoNonConcurrentServerTest() {
 		try {
 			TicketServer.start(16791);
@@ -48,7 +52,7 @@ public class TestTicketOffice {
 		c3.requestTicket();
 	}
 
-	@Test
+	//@Test
 	public void twoConcurrentServerTest() {
 		try {
 			TicketServer.start(16792);
@@ -85,4 +89,5 @@ public class TestTicketOffice {
 		}
 
 	}
+	*/
 }
